@@ -10,6 +10,7 @@ soup = BeautifulSoup(response.text, "html.parser")
 
 movie = soup.select('.lst_detail_t1 > li')
 
+final_movie_data = []
 
 with open('./movie_data.csv', 'w', encoding='utf-8-sig', newline='') as file:
     fieldnames = ['title', 'code']
@@ -27,4 +28,7 @@ with open('./movie_data.csv', 'w', encoding='utf-8-sig', newline='') as file:
         movie_data['code'] = code_num
         print(movie_data)
 
+        final_movie_data.append(movie_data)
         csvfile.writerow(movie_data)
+
+print(final_movie_data)
