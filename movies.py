@@ -42,8 +42,9 @@ for movie in movies_list:
 
 
 for movie in final_movie_data:
+    print(movie['title'])
+    print()
     #review_url = "https://movie.naver.com/movie/bi/mi/basic.nhn?code=" + movie['code'] + "#tab"
-    
     #response = requests.get(review_url)
     soup = BeautifulSoup(response.text, 'html.parser')
     params = (
@@ -66,8 +67,10 @@ for movie in final_movie_data:
         if reple != None:
             reple = reple.text.replace("\n","").replace("\t", "")
         else:
-            reple = reple.select_one('._unfold_ment > a')['data-src']
+            reple = reple.select_one('._unfold_ment > a')['data-src'].text
         print(score)
         print(reple)
         i = int(i) + 1
 
+    print()
+    print()
