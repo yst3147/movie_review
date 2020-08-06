@@ -71,4 +71,3 @@ for movie in final_movie_data:
         print(reple)
         i = int(i) + 1
 
-    break
