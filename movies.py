@@ -64,10 +64,10 @@ for movie in final_movie_data:
         i = str(i)
         score = r.select_one('.star_score > em').text
         reple = r.select_one(f'.score_reple > p > span[id=_filtered_ment_{i}]')
-        if reple != None:
-            reple = reple.text.replace("\n","").replace("\t", "")
+        if r.select_one('._unfold_ment'):
+            reple = reple.select_one('._unfold_ment > a')['data-src'].strip()
         else:
-            reple = reple.select_one('._unfold_ment > a')['data-src'].text
+            reple = reple.text.strip()
         print(score)
         print(reple)
         i = int(i) + 1
