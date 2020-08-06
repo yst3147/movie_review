@@ -67,23 +67,23 @@ for movie in final_movie_data:
 
     for num in range(1, 11): # 리뷰 10페이지까지
         i = 0
-        num = str(num)
+        num = str(num) # 페이지 변수
         soup_review = soup.select_one(f'div.ifr_area.basic_ifr > .input_netizen > .paging > div > a[id=pagerTagAnchor{num}]')
-        if soup_review:
+        if soup_review: # 10페이지까지 없는 경우 대비
             review_page = "https://movie.naver.com/" + soup_review['href']
 
-            if review_page:
+            if review_page: # 리뷰 페이지가 있는 경우만
                 response = requests.get(review_page)
                 soup = BeautifulSoup(response.text, 'html.parser') 
                 review = soup.select('div.ifr_area.basic_ifr > .input_netizen > .score_result > ul > li')
 
                 for r in review:
-                    i = str(i)
+                    i = str(i) # 댓글 번호 변수
                     score = r.select_one('.star_score > em').text
                     reple = r.select_one(f'.score_reple > p > span[id=_filtered_ment_{i}]')
-                    if r.select_one('._unfold_ment'):
+                    if r.select_one('._unfold_ment'): # 리뷰가 링크로 되어있는 경우
                         reple = reple.select_one('._unfold_ment > a')['data-src'].strip()
-                    else:
+                    else: # 리뷰가 전부 나오는 경우
                         reple = reple.text.strip()
                     print(score)
                     print(reple)
