@@ -99,9 +99,9 @@ for movie in final_movie_data:
                 print()
                 print()
 
-#    with open(f'./movie_review_folder/{title}.csv', 'w', encoding='utf-8-sig', newline='') as file:
-#        fieldnames = ['score', 'reple']
-#        csvfile = csv.DictWriter(file, fieldnames = fieldnames)
-#        csvfile.writeheader()
-#        for f in final_movie_review:
-#            csvfile.writerow(f)
+    with open(f'./movie_review_folder/{title.split(":")[0]}_review.csv', 'w', encoding='utf-8-sig', newline='') as file:
+        fieldnames = ['score', 'reple']
+        csvfile = csv.DictWriter(file, fieldnames = fieldnames)
+        csvfile.writeheader()
+        for f in final_movie_review:
+            csvfile.writerow(f)
