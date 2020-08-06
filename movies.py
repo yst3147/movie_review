@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import csv
 
 response = requests.get('https://movie.naver.com/movie/running/current.nhn')
 soup = BeautifulSoup(response.text, 'html.parser')
@@ -41,9 +42,9 @@ for movie in movies_list:
 #     print(movie_code, ' ', movie_title)
 
 
+
 for movie in final_movie_data:
-    print(movie['title'])
-    print()
+
     #review_url = "https://movie.naver.com/movie/bi/mi/basic.nhn?code=" + movie['code'] + "#tab"
     #response = requests.get(review_url)
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -56,21 +57,51 @@ for movie in final_movie_data:
     )
 
     response = requests.get('https://movie.naver.com/movie/bi/mi/pointWriteFormList.nhn', params=params)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    review = soup.select('div.ifr_area.basic_ifr > .input_netizen > .score_result > ul > li')
-    
-    i = 0
-    for r in review:
-        i = str(i)
-        score = r.select_one('.star_score > em').text
-        reple = r.select_one(f'.score_reple > p > span[id=_filtered_ment_{i}]')
-        if r.select_one('._unfold_ment'):
-            reple = reple.select_one('._unfold_ment > a')['data-src'].strip()
-        else:
-            reple = reple.text.strip()
-        print(score)
-        print(reple)
-        i = int(i) + 1
+    soup = BeautifulSoup(response.text, 'html.parser') 
 
+    final_movie_review = []
+    
+    title = movie['title']
+    print(title)
     print()
-    print()
+
+    for num in range(1, 11): # 리뷰 10페이지까지
+        i = 0
+        num = str(num)
+        soup_review = soup.select_one(f'div.ifr_area.basic_ifr > .input_netizen > .paging > div > a[id=pagerTagAnchor{num}]')
+        if soup_review:
+            review_page = "https://movie.naver.com/" + soup_review['href']
+
+            if review_page:
+                response = requests.get(review_page)
+                soup = BeautifulSoup(response.text, 'html.parser') 
+                review = soup.select('div.ifr_area.basic_ifr > .input_netizen > .score_result > ul > li')
+
+                for r in review:
+                    i = str(i)
+                    score = r.select_one('.star_score > em').text
+                    reple = r.select_one(f'.score_reple > p > span[id=_filtered_ment_{i}]')
+                    if r.select_one('._unfold_ment'):
+                        reple = reple.select_one('._unfold_ment > a')['data-src'].strip()
+                    else:
+                        reple = reple.text.strip()
+                    print(score)
+                    print(reple)
+
+                    movie_review = {
+                        'score' : score,
+                        'reple' : reple
+                    }
+
+                    final_movie_review.append(movie_review)
+                    i = int(i) + 1
+
+                print()
+                print()
+
+#    with open(f'./movie_review_folder/{title}.csv', 'w', encoding='utf-8-sig', newline='') as file:
+#        fieldnames = ['score', 'reple']
+#        csvfile = csv.DictWriter(file, fieldnames = fieldnames)
+#        csvfile.writeheader()
+#        for f in final_movie_review:
+#            csvfile.writerow(f)
