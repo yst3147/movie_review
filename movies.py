@@ -47,7 +47,7 @@ for movie in final_movie_data:
 
     #review_url = "https://movie.naver.com/movie/bi/mi/basic.nhn?code=" + movie['code'] + "#tab"
     #response = requests.get(review_url)
-    soup = BeautifulSoup(response.text, 'html.parser')
+    # soup = BeautifulSoup(response.text, 'html.parser')
     params = (
     ('code', movie['code']),
     ('type', 'after'),
@@ -58,7 +58,6 @@ for movie in final_movie_data:
 
     response = requests.get('https://movie.naver.com/movie/bi/mi/pointWriteFormList.nhn', params=params)
     soup = BeautifulSoup(response.text, 'html.parser') 
-
     final_movie_review = []
     
     title = movie['title']
